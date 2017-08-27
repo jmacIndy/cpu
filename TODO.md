@@ -1,14 +1,24 @@
 # TODO
+* Figure out:
+..* how to handle interrupts
+..* how to set flags for compares
+..* handle overflows and underflows
+..* handle signing
+..* check boundaries for read/write
+..* print function should use interrupts
+..* remove BEEP function, not useful
 * Complete the following functions:
- * opJumpEqual
- * opJumpNotEqual
- * opLessThan
- * opGreaterThan
- * opInterrupt
- * opCompare
- * opJumpNotZero
- * opJumpZero
+..* opJumpEqual
+..* opJumpNotEqual
+..* opJumpLessThan
+..* opJUmpGreaterThan
+..* opInterrupt
+..* opCompare
+..* opJumpNotZero
+..* opJumpZero
 * Write unit tests
 * Write assembler
-* Write main program
+* Write real main program
+* Expand from 8-bits to 16-bits
 * Beyond: write OS
+* Compiler for C into assembler
