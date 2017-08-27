@@ -8,7 +8,6 @@
 //    - Register 0 and Register 1 set to 0
 //    - All flags turned off
 //    - Program Counter and Head Pointer set to address 0
-//    - Memory and Heap are reset to all zeroes
 
 void Cpu::initialize() 
 {
@@ -20,8 +19,6 @@ void Cpu::initialize()
    resetHalt();
    setProgramCounter(0);
    setHeapPointer(0);
-   memory.fill(0x00);
-   heap.fill(0x00);
 }
 
 // FUNCTION: printRegister0
@@ -33,7 +30,7 @@ void Cpu::initialize()
 void Cpu::printRegister0() const
 {
    std::cout << "Register 0      : " 
-             << +getRegister0() 
+             << static_cast<int>(getRegister0())
              << std::endl;
 }
 
@@ -46,7 +43,7 @@ void Cpu::printRegister0() const
 void Cpu::printRegister1() const
 {
    std::cout << "Register 1      : " 
-             << +getRegister1() 
+             << static_cast<int>(getRegister1())
              << std::endl;
 }
 
@@ -59,7 +56,7 @@ void Cpu::printRegister1() const
 void Cpu::printProgramCounter() const
 {
    std::cout << "Program Counter : " 
-             << +getProgramCounter() 
+             << static_cast<int>(getProgramCounter())
              << std::endl;
 }
 
@@ -72,7 +69,7 @@ void Cpu::printProgramCounter() const
 void Cpu::printHeapPointer() const
 {
    std::cout << "Heap Pointer    : " 
-             << +getHeapPointer() 
+             << static_cast<int>(getHeapPointer())
              << std::endl;
 }
 
@@ -132,91 +129,6 @@ void Cpu::dump() const
    std::cout << std::setfill(' ');
 }
 
-// FUNCTION: dumpMemory
-// PURPOSE: Print out the contents of the memory (where code lives)
-// RETURNS: void
-// ARGUMENTS: none
-// EFFECTS: none
-
-void Cpu::dumpMemory() const
-{
-   int addressCounter = 0x00;
-
-   std::cout << "Memory Contents: " 
-             << std::endl
-             << "-----------------" 
-             << std::endl;
-
-   int j = 0x00;
-
-   for (auto i = memory.begin(); i != memory.end(); i++, j++)
-   {
-      if ((j % 0x0F) == 0x00)
-      {
-         std::cout << std::endl
-                   << "Address("
-                   << std::setw(2)
-                   << std::hex
-                   << std::uppercase
-                   << addressCounter
-                   << ") ";
-         addressCounter += 0x0F;
-      }
-
-      std::cout << std::setw(2)
-                << std::setfill('0')
-                << std::hex
-                << std::uppercase
-                << +*i
-                << " ";
-   }
-
-   std::cout << std::endl
-             << std::setfill(' ');
-}
-
-// FUNCTION: dumpHeap
-// PURPOSE: Print out contents of the heap (where data lives)
-// RETURNS: void
-// ARGUMENTS: none
-// EFFECTS: none
-
-void Cpu::dumpHeap() const
-{
-   int addressCounter = 0x00;
-
-   std::cout << "Heap Contents: " 
-             << std::endl
-             << "---------------" 
-             << std::endl;
-
-   int j = 0x00;
-   for (auto i = heap.begin(); i != heap.end(); i++, j++)
-   {
-      if ((j % 0x0F) == 0x00)
-      {
-         std::cout << std::endl
-                   << "Address("
-                   << std::setw(2)
-                   << std::hex
-                   << std::uppercase
-                   << addressCounter
-                   << ") ";
-         addressCounter += 0x0F;
-      }
-
-      std::cout << std::setw(2)
-                << std::setfill('0')
-                << std::hex
-                << std::uppercase
-                << +*i
-                << " ";
-   }
-
-   std::cout << std::endl
-             << std::setfill(' ');
-}
-
 // FUNCTION: opHalt (HALT op code 0x00)
 // PURPOSE: Sets the halt flag.
 // RETURNS: void
@@ -234,34 +146,36 @@ void Cpu::opHalt()
 // FUNCTION: opLoad0 (LDR0 op code 0x01)
 // PURPOSE: Set value in Register 0
 // RETURNS: void
-// ARGUMENTS: none
+// ARGUMENTS: 
+//    - Reference to Memory object
 // SETUP:
 //    - operand specified as value to place in Register 0
 // EFFECTS: 
 //    - Register 0 has changed
 //    - Program Counter incremented by 2
 
-void Cpu::opLoad0()
+void Cpu::opLoad0(Memory& memory)
 {
    incrementProgramCounter();
-   setRegister0(read(getProgramCounter()));
+   setRegister0(memory.read(getProgramCounter()));
    incrementProgramCounter();
 }
 
 // FUNCTION: opLoad1 (LDR1 op code 0x02)
 // PURPOSE: Set value in Register 1
 // RETURNS: void
-// ARGUMENTS: none
+// ARGUMENTS: 
+//    - Reference to Memory object
 // SETUP: 
 //    - operand specified as value to place in Register 1
 // EFFECTS: 
 //    - Register 1 has changed
 //    - Program Counter incremented by 2
 
-void Cpu::opLoad1()
+void Cpu::opLoad1(Memory& memory)
 {
    incrementProgramCounter();
-   setRegister1(read(getProgramCounter()));
+   setRegister1(memory.read(getProgramCounter()));
    incrementProgramCounter();
 }
 
@@ -285,7 +199,9 @@ void Cpu::opAdd()
 // FUNCTION: opStore (STOR op code 0x04)
 // PURPOSE: Stores a value onto heap
 // RETURNS: void
-// ARGUMENTS: none
+// ARGUMENTS:
+//    - 1. Reference to Memory object
+//    - 2. Reference to Heap object
 // SETUP: 
 //    - Register 0 must contain value to be written to heap
 //    - Operand must contain heap address
@@ -294,11 +210,11 @@ void Cpu::opAdd()
 //    - Heap Pointer set to address of value written to heap
 //    - Program Counter incrememted by 2
 
-void Cpu::opStore()
+void Cpu::opStore(Memory& memory, Heap& heap)
 {
    incrementProgramCounter();
-   setHeapPointer(read(getProgramCounter()));
-   writeHeap(getHeapPointer(), getRegister0());
+   setHeapPointer(memory.read(getProgramCounter()));
+   heap.write(getHeapPointer(), getRegister0());
    incrementProgramCounter();
 }
 
@@ -306,20 +222,22 @@ void Cpu::opStore()
 // PURPOSE: Prints out a value from heap
 // RETURNS: void
 // ARGUMENTS: 
+//    - 1. Reference to Memory object
+//    - 2. Reference to Heap object
 //    - Operand must contain heap address
 // SETUP: none
 // EFFECTS:
 //    - Register 0 has been altered
 //    - Program Counter incremented by 2
 
-void Cpu::opPrint()
+void Cpu::opPrint(Memory& memory, Heap& heap)
 {
    incrementProgramCounter();
-   setHeapPointer(read(getProgramCounter()));
+   setHeapPointer(memory.read(getProgramCounter()));
    std::cout << "HEAP ADDRESS: " 
-             << +getHeapPointer() 
+             << static_cast<int>(getHeapPointer())
              << " VALUE: "
-             << +readHeap(getHeapPointer()) 
+             << static_cast<int>(heap.read(getHeapPointer()))
              << std::endl;
    incrementProgramCounter();
 }
@@ -418,16 +336,17 @@ void Cpu::opJumpGreaterThan()
 // PURPOSE: Jump to a subroutine
 // RETURNS: void
 // ARGUMENTS: 
+//    - Pass reference to Memory object
 //    - operand contains starting address of subroutine
 // EFFECTS:
 //    - Item pushed onto stack
 //    - Program Counter set to start of subroutine
 
-void Cpu::opCall()
+void Cpu::opCall(Memory& memory)
 {
    incrementProgramCounter();
    stack.push(getProgramCounter() + 1);
-   setProgramCounter(read(getProgramCounter()));
+   setProgramCounter(memory.read(getProgramCounter()));
 }
 
 // FUNCTION: opReturn (RET op code 0x0F)
@@ -469,14 +388,15 @@ void Cpu::opJumpNotZero()
 // PURPOSE: Jump to a new location, with no intention of returning
 // RETURNS: void
 // ARGUMENTS:
+//    - Pass reference to Memory object
 //    - operand contains address to jump to
 // EFFECTS:
 //    - Program Counter set to address in operand
 
-void Cpu::opJump()
+void Cpu::opJump(Memory& memory)
 {
    incrementProgramCounter();
-   setProgramCounter(read(getProgramCounter()));
+   setProgramCounter(memory.read(getProgramCounter()));
 }
 
 // FUNCTION: opJumpZero (JZ opcode 0x14)
@@ -550,35 +470,37 @@ void Cpu::opDecrement1()
 // PURPOSE: Loops through instructions stored in memory, and calls
 //    appropriate routines to execute them.
 // RETURNS: void
-// ARGUMENTS: none
+// ARGUMENTS: 
+//    - 1. Reference to Memory object
+//    - 2. Reference to Heap object
 // EFFECTS: none
 
-void Cpu::run()
+void Cpu::run(Memory& memory, Heap& heap)
 {
    std::cout << "... Running ..." 
              << std::endl;
 
    while (1)
    {
-      switch(read(getProgramCounter()))
+      switch(memory.read(getProgramCounter()))
       {
       case 0x00:
          opHalt();
          break;
       case 0x01:
-         opLoad0();
+         opLoad0(memory);
          break;
       case 0x02:
-         opLoad1();
+         opLoad1(memory);
          break;
       case 0x03:
          opAdd();
          break;
       case 0x04:
-         opStore();
+         opStore(memory, heap);
          break;
       case 0x05:
-         opPrint();
+         opPrint(memory, heap);
          break;
       case 0x06:
          opBeep();
@@ -605,7 +527,7 @@ void Cpu::run()
          opJumpGreaterThan();
          break;
       case 0x0E:
-         opCall();
+         opCall(memory);
          break;
       case 0x0F:
          opReturn();
@@ -620,7 +542,7 @@ void Cpu::run()
          opJumpNotZero();
          break;
       case 0x13:
-         opJump();
+         opJump(memory);
          break;
       case 0x14:
          opJumpZero();
