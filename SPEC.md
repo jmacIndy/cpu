@@ -1,5 +1,6 @@
 # Instructions
 Mnemonic | Operand | OpCode | Description
+-------- | ------- | ------ | -----------
 HALT||0x00|Halt the CPU
 LDR0|<value>|0x01|Set register 0 = value
 LDR1|<value>|0x02|Set register 1 = value
