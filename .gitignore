@@ -1,3 +1,4 @@
 *.o
+mycpu
 test
 git-commands
