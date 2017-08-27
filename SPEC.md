@@ -2,8 +2,8 @@
 Mnemonic | Operand | OpCode | Description
 -------- | ------- | ------ | -----------
 HALT||0x00|Halt the CPU
-LDR0|<value>|0x01|Set register 0 = value
-LDR1|<value>|0x02|Set register 1 = value
+LDR0|*value*|0x01|Set register 0 = *value*
+LDR1|*value*|0x02|Set register 1 = *value*
 ADD||0x03|Set register 0 = register 0 + register 1
 STOR|<address>|0x04|Store register 0 on heap at <address>
 PRT|<address>|0x05|Print contents of heap at <address>
