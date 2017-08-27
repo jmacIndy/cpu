@@ -27,7 +27,7 @@ INC1||0x16|Increment register 1 by 1
 DEC0||0x17|Decrement register 0 by 1
 DEC1||0x18|Decrement register 1 by 1
 
-# Comments
+# Comments/Blanks
 any line that starts with //
 or // til end of line
 
@@ -37,19 +37,22 @@ any line can be blank
 Directive | Meaning
 --------- | -------
 .CODE|starts code section
-.VARS|starts a section of variables;followed by *label* *value*; continues
-until .CODE directive found
+.VARS|starts a section of variables;followed by *label* *value*; continues until .CODE directive is found
 
-Any *value* in code: =*number* OR =X*hex number* OR *label*
+Any *value* in code
+* *number* 
+* =X*hex number* 
+* *label*
 
 # Sample Code
-```.DATA
+```assembly
+.DATA
    addop1 =0X02
    addop2 =0X07
    addresult1 =0
    addop3 =X04
    addop4 =X09
-   addresult =0
+   addresult2 =0
 
 .CODE
    LDR0 addop1
