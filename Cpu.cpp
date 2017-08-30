@@ -663,10 +663,13 @@ void Cpu::run(Memory& memory, Heap& heap)
          break;
       case 0x16:
          opIncrement1();
+         break;
       case 0x17:
          opDecrement0();
+         break;
       case 0x18:
          opDecrement1();
+         break;
       default:
          std::cout << "ERROR: Bad OpCode" 
                    << std::endl;
