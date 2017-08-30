@@ -305,31 +305,106 @@ void Cpu::opSubtract()
 }
 
 // FUNCTION: opJumpEqual (JEQ op code 0x0A)
+// PURPOSE: Jump to another location if Register 0 equals Register 1
+// RETURNS: void
+// ARGUMENTS:
+//    1. Reference to memory address
+// SETUP:
+//    - register 0 should contain first operand to compare
+//    - register 1 should contain second operand to compare
+// EFFECTS:
+//    - If registers equal, program counter set to address in operand
+//    - Else, program counter incremented by 2
 
-void Cpu::opJumpEqual()
+void Cpu::opJumpEqual(Memory& memory)
 {
-   // TODO
+   incrementProgramCounter();
+   if (getRegister0() == getRegister1())
+   {
+      setProgramCounter(memory.read(getProgramCounter()));
+   }
+   else
+   {
+      incrementProgramCounter();
+   }
 }
 
 // FUNCTION: opJumpNotEqual (JNE op code 0x0B)
+// PURPOSE: Jump to another location if register 0 and register 1 not equal
+// RETURNS: void
+// ARGUMENTS:
+//    1. Reference to Memory object
+// SETUP:
+//    - Register 0 should contain first value to compare
+//    - Register 1 should contain second value to compare
+// EFFECTS:
+//    - If register 0 and register 1 are not equal, program counter set
+//      to address in operand
+//    - Else, program counter is incremented by 2
 
-void Cpu::opJumpNotEqual()
+void Cpu::opJumpNotEqual(Memory& memory)
 {
-   // TODO
+   incrementProgramCounter();
+   if (getRegister0() != getRegister1())
+   {
+      setProgramCounter(memory.read(getProgramCounter()));
+   }
+   else
+   {
+      incrementProgramCounter();
+   }
 }
 
 // FUNCTION: opJumpLessThan (JLT op code 0x0C)
+// PURPOSE: Jump to another location if register 0 is less than register 1
+// RETURNS: void
+// ARGUMENTS:
+//    1. Reference to Memory object
+// SETUP:
+//    - Register 0 should be set to first value to compare
+//    - Register 1 should be set to second value to compare
+// EFFECTS:
+//    - If Register 0 is less than Register 1, the program counter is set
+//      to address in operand
+//    - Else, the Program Counter is incremented by 2
 
-void Cpu::opJumpLessThan()
+void Cpu::opJumpLessThan(Memory& memory)
 {
-   // TODO
+   incrementProgramCounter();
+   if (getRegister0() < getRegister1())
+   {
+      setProgramCounter(memory.read(getProgramCounter()));
+   }
+   else
+   {
+      incrementProgramCounter();
+   }
 }
 
 // FUNCTION: opJumpGreaterThan (JGT op code 0x0D)
+// PURPOSE: Jump to another location if Register 0 is greater than Register 1
+// RETURNS: void
+// ARGUMENTS:
+//    1. Reference to Memory object
+// SETUP:
+//    - Register 0 should contain first value to be compared
+//    - Register 1 should contain second value to be compared
+// EFFECTS:
+//    - If Register 0 is greater than Register 1, set Program Counter to the
+//      address in operand
+//    - Else, increment Program Counter by 2
 
-void Cpu::opJumpGreaterThan()
+void Cpu::opJumpGreaterThan(Memory& memory)
 {
-   // TODO
+   incrementProgramCounter();
+   if (getRegister0() > getRegister1())
+   {
+      setProgramCounter(memory.read(getProgramCounter()));
+   }
+   else
+   {
+      incrementProgramCounter();
+   }
 }
 
 // FUNCTION: opCall (CALL op code 0x0E)
@@ -378,10 +453,28 @@ void Cpu::opCompare()
 }
 
 // FUNCTION: opJumpNotZero (JNZ op code 0x12)
+// PURPOSE: Jump to another location if Register 0 not equal to zero
+// RETURNS: void
+// ARGUMENTS: 
+//    1. Reference to Memory object
+// SETUP:
+//    - Register 0 should contain value to compare to zero
+// EFFECTS:
+//    - If Register 0 is equal to zero, set Program Counter equal to address
+//      in operand
+//    - Else, Program Counter is incremented by 2
 
-void Cpu::opJumpNotZero()
+void Cpu::opJumpNotZero(Memory& memory)
 {
-   // TODO
+   incrementProgramCounter();
+   if (getRegister0() != 0)
+   {
+      setProgramCounter(memory.read(getProgramCounter()));
+   }
+   else
+   {
+      incrementProgramCounter();
+   }
 }
 
 // FUNCTION: opJump (JMP op code 0x13)
@@ -400,10 +493,28 @@ void Cpu::opJump(Memory& memory)
 }
 
 // FUNCTION: opJumpZero (JZ opcode 0x14)
+// PURPOSE: Jump to another location if Register 0 equals zero
+// RETURNS: void
+// ARGUMENTS:
+//    1. Reference to Memory object
+// SETUP:
+//    - Register 0 should contain value to compare to zero
+// EFFECTS:
+//    - If Register 0 is equal to zero, set Program Counter equal to address
+//      in operand
+//    - Else, the Program Counter is incremented by 2
 
-void Cpu::opJumpZero()
+void Cpu::opJumpZero(Memory& memory)
 {
-   // TODO
+   incrementProgramCounter();
+   if (getRegister0() == 0)
+   {
+      setProgramCounter(memory.read(getProgramCounter()));
+   }
+   else
+   {
+      incrementProgramCounter();
+   }
 }
 
 // FUNCTION: opIncrement0 (INC0 opcode 0x15)
@@ -515,16 +626,16 @@ void Cpu::run(Memory& memory, Heap& heap)
          opSubtract();
          break;
       case 0x0A:
-         opJumpEqual();
+         opJumpEqual(memory);
          break;
       case 0x0B:
-         opJumpNotEqual();
+         opJumpNotEqual(memory);
          break;
       case 0x0C:
-         opJumpLessThan();
+         opJumpLessThan(memory);
          break;
       case 0x0D:
-         opJumpGreaterThan();
+         opJumpGreaterThan(memory);
          break;
       case 0x0E:
          opCall(memory);
@@ -539,13 +650,13 @@ void Cpu::run(Memory& memory, Heap& heap)
          opCompare();
          break;
       case 0x12:
-         opJumpNotZero();
+         opJumpNotZero(memory);
          break;
       case 0x13:
          opJump(memory);
          break;
       case 0x14:
-         opJumpZero();
+         opJumpZero(memory);
          break;
       case 0x15:
          opIncrement0();

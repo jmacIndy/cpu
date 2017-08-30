@@ -1,21 +1,15 @@
 # TODO
 * Figure out:
 ..* how to handle interrupts
-..* how to set flags for compares
+..* how to set flags for compares, and then change JMP instructions
 ..* handle overflows and underflows
 ..* handle signing
 ..* check boundaries for read/write
 ..* print function should use interrupts
 ..* remove BEEP function, not useful
 * Complete the following functions:
-..* opJumpEqual
-..* opJumpNotEqual
-..* opJumpLessThan
-..* opJUmpGreaterThan
 ..* opInterrupt
 ..* opCompare
-..* opJumpNotZero
-..* opJumpZero
 * Write unit tests
 * Write assembler
 * Write real main program
