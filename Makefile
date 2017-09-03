@@ -1,16 +1,19 @@
-all: mycpu
+all: cpuc
 
-mycpu: test.o Memory.o Cpu.o  Heap.o
-	g++ -std=c++11 test.o Cpu.o Memory.o Heap.o -o mycpu
+cpuc: main.o memory.o cpu.o heap.o stack.o
+	gcc main.o cpu.o memory.o heap.o stack.o -o ~/bin/cpuc
 
-test.o: test.cpp Cpu.h Memory.h Heap.h
-	g++ -c -std=c++11 test.cpp
+main.o: main.c cpu.h memory.h heap.h stack.h
+	gcc -c main.c
 
-Cpu.o: Cpu.cpp Cpu.h Memory.h Heap.h
-	g++ -c -std=c++11 Cpu.cpp
+cpu.o: cpu.c cpu.h memory.h heap.h stack.h
+	gcc -c cpu.c
 
-Memory.o: Memory.cpp Memory.h
-	g++ -c -std=c++11 Memory.cpp
+memory.o: memory.c memory.h
+	gcc -c memory.c
 
-Heap.o: Heap.cpp Heap.h
-	g++ -c -std=c++11 Heap.cpp
+heap.o: heap.c heap.h
+	gcc -c heap.c
+
+stack.o: stack.c stack.h
+	gcc -c stack.c
