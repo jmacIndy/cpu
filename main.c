@@ -4,6 +4,7 @@
 #include "memory.h"
 #include "heap.h"
 #include "stack.h"
+#include "ops.h"
 
 void loadDefaultProgram()
 {

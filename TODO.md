@@ -4,7 +4,7 @@
 ..* how to set flags for compares, and then change JMP instructions
 ..* handle overflows and underflows
 ..* handle signing
-..* check boundaries for read/write
+..* finish check boundaries for push/pop
 ..* print function should use interrupts
 ..* remove BEEP function, not useful
 * Complete the following functions:

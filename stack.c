@@ -14,7 +14,14 @@ void clearStack()
 
 void push(byte value)
 {
-   stack[stackPointer++] = value;
+   if (stackPointer == STACK_SIZE)
+   {
+      printf("ERROR: No more room on the stack!\n");
+   }
+   else
+   {
+      stack[stackPointer++] = value;
+   }
 }
 
 byte pop()

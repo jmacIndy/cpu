@@ -12,12 +12,27 @@ void clearHeap()
 
 void writeHeap(byte address, byte value)
 {
-   heap[address] = value;
+   if (address < HEAP_SIZE)
+   {
+      heap[address] = value;
+   }
+   else
+   {
+      printf("ERROR: Cannot write above maximum heap size!\n");
+   }
 }
 
 byte readHeap(byte address)
 {
-   return heap[address];
+   if (address < HEAP_SIZE)
+   {
+      return heap[address];
+   }
+   else
+   {
+      printf("ERROR: Cannot read above maximum heap size!\n");
+      return 0;
+   }
 }
 
 void dumpHeap()

@@ -1,12 +1,15 @@
 all: cpuc
 
-cpuc: main.o memory.o cpu.o heap.o stack.o
-	gcc main.o cpu.o memory.o heap.o stack.o -o ~/bin/cpuc
+cpuc: main.o memory.o cpu.o heap.o stack.o ops.o
+	gcc main.o cpu.o memory.o heap.o stack.o ops.o -o ~/bin/cpuc
 
-main.o: main.c cpu.h memory.h heap.h stack.h
+main.o: main.c cpu.h memory.h heap.h stack.h ops.h
 	gcc -c main.c
 
-cpu.o: cpu.c cpu.h memory.h heap.h stack.h
+ops.o: ops.c ops.h cpu.h memory.h heap.h stack.h
+	gcc -c ops.c
+
+cpu.o: cpu.c cpu.h
 	gcc -c cpu.c
 
 memory.o: memory.c memory.h

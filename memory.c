@@ -12,12 +12,27 @@ void clearMemory()
 
 void writeMemory(byte address, byte value)
 {
-   memory[address] = value;
+   if (address < MEMORY_SIZE)
+   {
+      memory[address] = value;
+   }
+   else
+   {
+      printf("ERROR: Cannot write above maximum memory!\n");
+   }
 }
 
 byte readMemory(byte address)
 {
-   return memory[address];
+   if (address < MEMORY_SIZE)
+   {
+      return memory[address];
+   }
+   else
+   {
+      printf("ERROR: Cannot read above maximum memory!\n");
+      return 0;
+   }
 }
 
 void dumpMemory()
