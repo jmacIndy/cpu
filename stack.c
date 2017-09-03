@@ -16,17 +16,27 @@ void push(byte value)
 {
    if (stackPointer == STACK_SIZE)
    {
-      printf("ERROR: No more room on the stack!\n");
+      printf("ERROR: Stack is full!\n");
    }
    else
    {
-      stack[stackPointer++] = value;
+      stack[stackPointer] = value;
+      stackPointer++;
    }
 }
 
 byte pop()
 {
-   return stack[--stackPointer];
+   if (stackPointer == 0)
+   {
+      printf("ERROR: Stack is empty!\n");
+      return 0;
+   }
+   else
+   {
+      stackPointer--;
+      return stack[stackPointer];
+   }
 }
 
 void dumpStack()

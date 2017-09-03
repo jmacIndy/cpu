@@ -7,7 +7,6 @@ LDR1|*value*|0x02|Set register 1 = *value*
 ADD||0x03|Set register 0 = register 0 + register 1
 STOR|*address*|0x04|Store register 0 on heap at *address*
 PRT|*address*|0x05|Print contents of heap at *address*
-BEEP||0x06|Print BEEP to the screen (USELESS)
 MULT||0x07|Set register 0 = register 0 * register 1
 DIV|| 0x08|Set register 0 = register 0 / register 1
 SUB||0x09|Set register 0 = register 0 - register 1

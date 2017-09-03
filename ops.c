@@ -49,13 +49,6 @@ void opPrint()
    programCounter++;
 }
 
-/* FUNCTION opBeep (BEEP op code 0x06) */
-void opBeep()
-{
-   printf("BEEP!\n");
-   programCounter++;
-}
-
 /* FUNCTION: opMultiply (MULT op code 0x07) */
 void opMultiply()
 {
@@ -248,9 +241,6 @@ void run()
          break;
       case 0x05:
          opPrint();
-         break;
-      case 0x06:
-         opBeep();
          break;
       case 0x07:
          opMultiply();

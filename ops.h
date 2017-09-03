@@ -16,7 +16,6 @@ void opLoad1();           // LDR1 opcode 0x02
 void opAdd();             // ADD  opcode 0x03
 void opStore();           // STOR opcode 0x04
 void opPrint();           // PRT  opcode 0x05
-void opBeep();            // BEEP opcode 0x06
 void opMultiply();        // MULT opcode 0x07
 void opDivide();          // DIV  opcode 0x08
 void opSubtract();        // SUB  opcode 0x09
