@@ -7,16 +7,16 @@ void opHalt()
    programCounter++;
 }
 
-/* FUNCTION: opLoad0 (LDR0 op code 0x01) */
-void opLoad0()
+/* FUNCTION: opSet0 (SET0 op code 0x01) */
+void opSet0()
 {
    programCounter++;
    register0 = readMemory(programCounter);
    programCounter++;
 }
 
-/* FUNCTION: opLoad1 (LDR1 op code 0x02) */
-void opLoad1()
+/* FUNCTION: opSet1 (SET1 op code 0x02) */
+void opSet1()
 {
    programCounter++;
    register1 = readMemory(programCounter);
@@ -215,6 +215,22 @@ void opDecrement1()
    programCounter++;
 }
 
+/* FUNCTION: opLoad0 (LD0 opcode 0x19) */
+void opLoad0()
+{
+   programCounter++;
+   register0 = readHeap(programCounter);
+   programCounter++;
+}
+
+/* FUNCTION: opLoad1 (LD1 opcode 0x1A) */
+void opLoad1()
+{
+   programCounter++;
+   register1 = readHeap(programCounter);
+   programCounter++;
+}
+
 /* FUNCTION: run */
 void run()
 {
@@ -228,10 +244,10 @@ void run()
          opHalt();
          break;
       case 0x01:
-         opLoad0();
+         opSet0();
          break;
       case 0x02:
-         opLoad1();
+         opSet1();
          break;
       case 0x03:
          opAdd();
@@ -295,6 +311,12 @@ void run()
          break;
       case 0x18:
          opDecrement1();
+         break;
+      case 0x19:
+         opLoad0();
+         break;
+      case 0x1A:
+         opLoad1();
          break;
       default:
          printf("ERROR: Bad OpCode\n");

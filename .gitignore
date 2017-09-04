@@ -1,4 +1,4 @@
 *.o
-mycpu
-test
 git-commands
+a.out
+*.cpu

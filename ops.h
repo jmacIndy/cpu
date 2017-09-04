@@ -11,8 +11,8 @@
 typedef unsigned char byte;
 
 void opHalt();            // HALT opcode 0x00
-void opLoad0();           // LDR0 opcode 0x01
-void opLoad1();           // LDR1 opcode 0x02
+void opSet0();            // SET0 opcode 0x01
+void opSet1();            // SET1 opcode 0x02
 void opAdd();             // ADD  opcode 0x03
 void opStore();           // STOR opcode 0x04
 void opPrint();           // PRT  opcode 0x05
@@ -34,6 +34,8 @@ void opIncrement0();      // INC0 opcode 0x15
 void opIncrement1();      // INC1 opcode 0x16
 void opDecrement0();      // DEC0 opcode 0x17
 void opDecrement1();      // DEC1 opcode 0x18
+void opLoad0();           // LD0  opcode 0x19
+void opLoad1();           // LD1  opcode 0x1A
 
 void run();
 
