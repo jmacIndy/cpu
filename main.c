@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "cpu.h"
 #include "memory.h"
@@ -6,40 +8,8 @@
 #include "stack.h"
 #include "ops.h"
 
-void loadDefaultProgram()
-{
-   writeMemory(0x00, 0x01); // LDR0 0x02
-   writeMemory(0x01, 0x02);
-   writeMemory(0x02, 0x02); // LDR1 0x07
-   writeMemory(0x03, 0x07);
-   writeMemory(0x04, 0x03); // ADD
-   writeMemory(0x05, 0x04); // STOR 0x00
-   writeMemory(0x06, 0x00);
-   writeMemory(0x07, 0x05); // PRT 0x00
-   writeMemory(0x08, 0x00);
-   writeMemory(0x09, 0x0E); // CALL 0x0C
-   writeMemory(0x0A, 0x0C);
-   writeMemory(0x0B, 0x00); // HALT
-   writeMemory(0x0C, 0x01); // LDR0 0x04
-   writeMemory(0x0D, 0x04);
-   writeMemory(0x0E, 0x02); // LDR1 0x09
-   writeMemory(0x0F, 0x09);
-   writeMemory(0x10, 0x03); // ADD
-   writeMemory(0x11, 0x04); // STOR 0x01
-   writeMemory(0x12, 0x01);
-   writeMemory(0x13, 0x05); // PRT 0x01
-   writeMemory(0x14, 0x01);
-   writeMemory(0x15, 0x01); // LDR0 0x0A
-   writeMemory(0x16, 0x0A);
-   writeMemory(0x17, 0x04); // STORE 0x02
-   writeMemory(0x18, 0x02);
-   writeMemory(0x19, 0x05); // PRT 0x02
-   writeMemory(0x1A, 0x02);
-   writeMemory(0x1B, 0x17); // DEC0
-   writeMemory(0x1C, 0x12); // JNZ 0x17
-   writeMemory(0x1D, 0x17);
-   writeMemory(0x1E, 0x0F); // RET
-}
+#define MAX_FILENAME_SIZE 50
+#define MAX_INPUT_SIZE 500
 
 int displayMenu()
 {
@@ -47,15 +17,14 @@ int displayMenu()
 
    printf("Menu (my CPU)\n");
    printf("-------------\n");
-   printf("1. Load Default Program\n");
-   printf("2. Reset CPU\n");
-   printf("3. Clear Memory\n");
-   printf("4. Dump the CPU\n");
-   printf("5. Dump the Memory\n");
-   printf("6. Dump the Heap\n");
-   printf("7. Dump the Stack\n");
-   printf("8. Run the CPU\n");
-   printf("9. Compile/Load Program\n");
+   printf("1. Reset CPU\n");
+   printf("2. Clear Memory\n");
+   printf("3. Dump the CPU\n");
+   printf("4. Dump the Memory\n");
+   printf("5. Dump the Heap\n");
+   printf("6. Dump the Stack\n");
+   printf("7. Run the CPU\n");
+   printf("8. Load program from file\n");
    printf("X. Exit the CPU\n");
    printf("   Your choice===>");
 
@@ -63,6 +32,50 @@ int displayMenu()
    getchar(); /* consume the newline */
 
    return choice;
+}
+
+void loadProgram()
+{
+   char inName[MAX_FILENAME_SIZE];
+
+   printf("\nEnter input file name ===> ");
+   fgets(inName, sizeof(inName), stdin);
+   inName[strlen(inName) - 1] = '\0'; /* remove training \n */
+
+   FILE *inFile = fopen(inName, "r");
+   if (inFile == 0)
+   {
+      printf("ERROR: Could not open file %s\n", inName);
+      return;
+   }
+
+   char *inputLine;
+   size_t lineSize = MAX_INPUT_SIZE;
+
+   inputLine = (char *) malloc(lineSize + 1);
+
+   if (getline(&inputLine, &lineSize, inFile) == -1)
+   {
+      printf("ERROR: File is empty. Nothing to load.\n");
+      return;
+   }
+
+   int filePointer = 3; /* skip over CPU text */
+   byte memoryPointer = 0x00;
+   for (int i = filePointer; i < strlen(inputLine); i += 2)
+   {
+      char inData[5];
+      strcpy(inData, "0x");
+      strncat(inData, inputLine + i, 2);
+      //printf("write [%s] at [%02X]\n", inData, memoryPointer);
+      //printf("   [%02X]\n", (int) strtol(inData, NULL, 0));
+      writeMemory(memoryPointer, (int) strtol(inData, NULL, 0));
+      memoryPointer++;
+   }
+
+   free(inputLine);
+
+   fclose(inFile);
 }
 
 int main()
@@ -87,27 +100,24 @@ int main()
       switch (menuChoice)
       {
       case '1':
-         loadDefaultProgram();
-         break;
-      case '2':
          initializeCPU();
          break;
-      case '3':
+      case '2':
          clearMemory();
          break;
-      case '4':
+      case '3':
          dumpCPU();
          break;
-      case '5':
+      case '4':
          dumpMemory();
          break;
-      case '6':
+      case '5':
          dumpHeap();
          break;
-      case '7':
+      case '6':
          dumpStack();
          break;
-      case '8':
+      case '7':
          if (isHalt())
          {
             printf("ERROR: CPU is HALTED! Cannot run!\n");
@@ -117,7 +127,8 @@ int main()
             run();
          }
          break;
-      case '9':
+      case '8':
+         loadProgram();
          break;
       case 'X':
       case 'x':

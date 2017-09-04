@@ -9,7 +9,6 @@
 ..* opInterrupt
 ..* opCompare
 * Write unit tests
-* Write code to load object file into memory
 * Expand from 8-bits to 16-bits
 * Beyond: write OS
 * Compiler for C into assembler
