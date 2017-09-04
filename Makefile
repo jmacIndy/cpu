@@ -1,7 +1,10 @@
-all: cpuc
+all: cpuc assembler
 
 cpuc: main.o memory.o cpu.o heap.o stack.o ops.o
 	gcc main.o cpu.o memory.o heap.o stack.o ops.o -o ~/bin/cpuc
+
+assembler: assembler.o
+	gcc assembler.o -o ~/bin/assembler
 
 main.o: main.c cpu.h memory.h heap.h stack.h ops.h
 	gcc -c main.c
@@ -20,3 +23,6 @@ heap.o: heap.c heap.h
 
 stack.o: stack.c stack.h
 	gcc -c stack.c
+
+assembler.o: assembler.c
+	gcc -c assembler.c
