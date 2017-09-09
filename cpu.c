@@ -9,6 +9,26 @@ void initializeCPU()
    heapPointer = 0x00;
 }
 
+void setGreaterThan()
+{
+   flags = flags | GREATERTHAN_SET;
+}
+
+void setLessThan()
+{
+   flags = flags | LESSTHAN_SET;
+}
+
+void setZero()
+{
+   flags = flags | ZERO_SET;
+}
+
+void setNonZero()
+{
+   flags = flags | NONZERO_SET;
+}
+
 void setOverflow()
 {
    flags = flags | OVERFLOW_SET;
@@ -29,6 +49,26 @@ void setHalt()
    flags = flags | HALT_SET;
 }
 
+void resetGreaterThan()
+{
+   flags = flags & GREATERTHAN_RESET;
+}
+
+void resetLessThan()
+{
+   flags = flags & LESSTHAN_RESET;
+}
+
+void resetZero()
+{
+   flags = flags & ZERO_RESET;
+}
+
+void resetNonZero()
+{
+   flags = flags & NONZERO_RESET;
+}
+
 void resetOverflow()
 {
    flags = flags & OVERFLOW_RESET;
@@ -47,6 +87,26 @@ void resetSigning()
 void resetHalt()
 {
    flags = flags & HALT_RESET;
+}
+
+int isGreaterThan()
+{
+   return flags & GREATERTHAN_SET;
+}
+
+int isLessThan()
+{
+   return flags & LESSTHAN_SET;
+}
+
+int isZero()
+{
+   return flags & ZERO_SET;
+}
+
+int isNonZero()
+{
+   return flags & NONZERO_SET;
 }
 
 int isOverflow()
@@ -92,6 +152,22 @@ void printHeapPointer()
 void printFlags()
 {
    printf("Flags           : ");
+   if (isGreaterThan())
+   {
+      printf("GreaterThan ");
+   }
+   if (isLessThan())
+   {
+      printf("LessThan ");
+   }
+   if (isZero())
+   {
+      printf("Zero ");
+   }
+   if (isNonZero())
+   {
+      printf("NonZero ");
+   }
    if (isOverflow())
    {
       printf("Overflow ");

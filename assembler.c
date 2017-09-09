@@ -9,7 +9,7 @@ typedef unsigned char byte;
 #define SYMBOL_TABLE_SIZE 100
 #define MAX_FILENAME_SIZE 50
 
-#define NUM_NOOP_KEYWORDS 12
+#define NUM_NOOP_KEYWORDS 13
 #define NUM_OP_KEYWORDS 14
 #define MAX_KEYWORD_SIZE 5
 
@@ -41,7 +41,7 @@ int dataCount = 0;
 
 char noOpKeywords[NUM_NOOP_KEYWORDS][MAX_KEYWORD_SIZE] =
 { "HALT", "ADD", "MULT", "DIV", "SUB", "RET", "INT", "CMP",
-   "INC0", "INC1", "DEC0", "DEC1" };
+   "INC0", "INC1", "DEC0", "DEC1", "TST" };
 
 char opKeywords[NUM_OP_KEYWORDS][MAX_KEYWORD_SIZE] = 
 { "SET0", "SET1", "STOR", "PRT",
@@ -342,6 +342,10 @@ void pass2ProcessLine(char *token, FILE *outFile)
          fprintf(outFile, "1A");
          token = strtok(NULL, " \t\n");
          fprintf(outFile, "%02X", findSymbol(token, variable));
+      }
+      else if ((strcmp(token, "TST")) == 0)
+      {
+         fprintf(outFile, "1B");
       }
       else
       {

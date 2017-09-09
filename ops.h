@@ -36,6 +36,7 @@ void opDecrement0();      // DEC0 opcode 0x17
 void opDecrement1();      // DEC1 opcode 0x18
 void opLoad0();           // LD0  opcode 0x19
 void opLoad1();           // LD1  opcode 0x1A
+void opTest();            // TST  opcode 0x1B
 
 void run();
 

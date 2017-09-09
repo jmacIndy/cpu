@@ -26,5 +26,6 @@ SUB1 SET0 0x04 // use literals for this addition
 JB   STOR COUNTER
      PRT COUNTER
      DEC0
+     TST
      JNZ JB
      RET

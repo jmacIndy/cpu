@@ -74,7 +74,7 @@ void opSubtract()
 void opJumpEqual()
 {
    programCounter++;
-   if (register0 == register1)
+   if (!isGreaterThan() && !isLessThan())
    {
       programCounter = readMemory(programCounter);
    }
@@ -88,7 +88,7 @@ void opJumpEqual()
 void opJumpNotEqual()
 {
    programCounter++;
-   if (register0 != register1)
+   if (isGreaterThan() || isLessThan())
    {
       programCounter = readMemory(programCounter);
    }
@@ -102,7 +102,7 @@ void opJumpNotEqual()
 void opJumpLessThan()
 {
    programCounter++;
-   if (register0 < register1)
+   if (isLessThan())
    {
       programCounter = readMemory(programCounter);
    }
@@ -116,7 +116,7 @@ void opJumpLessThan()
 void opJumpGreaterThan()
 {
    programCounter++;
-   if (register0 > register1)
+   if (isGreaterThan())
    {
       programCounter = readMemory(programCounter);
    }
@@ -149,14 +149,24 @@ void opInterrupt()
 /* FUNCTION: opCompare (CMP op code 0x11) */
 void opCompare()
 {
-   ; // TODO
+   resetGreaterThan();
+   resetLessThan();
+
+   if (register0 > register1)
+   {
+      setGreaterThan();
+   }
+   else if (register0 < register1)
+   {
+      setLessThan();
+   }
 }
 
 /* FUNCTION: opJumpNotZero (JNZ op code 0x12) */
 void opJumpNotZero()
 {
    programCounter++;
-   if (register0 != 0)
+   if (isNonZero())
    {
       programCounter = readMemory(programCounter);
    }
@@ -177,7 +187,7 @@ void opJump()
 void opJumpZero()
 {
    programCounter++;
-   if (register0 == 0)
+   if (isZero())
    {
       programCounter = readMemory(programCounter);
    }
@@ -228,6 +238,24 @@ void opLoad1()
 {
    programCounter++;
    register1 = readHeap(programCounter);
+   programCounter++;
+}
+
+/* FUNCTION: opTest (TST opcode 0x1B) */
+void opTest()
+{
+   resetZero();
+   resetNonZero();
+
+   if (register0 == 0x00)
+   {
+      setZero();
+   }
+   else
+   {
+      setNonZero();
+   }
+
    programCounter++;
 }
 
@@ -317,6 +345,9 @@ void run()
          break;
       case 0x1A:
          opLoad1();
+         break;
+      case 0x1B:
+         opTest();
          break;
       default:
          printf("ERROR: Bad OpCode\n");
