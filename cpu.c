@@ -200,3 +200,21 @@ void dumpCPU()
    printFlags();
    printf("\n");
 }
+
+void pushCPUState() {
+
+    push(register0);
+    push(register1);
+    push(programCounter);
+    push(heapPointer);
+    push(flags);
+}
+
+void popCPUState() {
+
+    flags = pop();
+    heapPointer = pop();
+    programCounter = pop();
+    register1 = pop();
+    register0 = pop();
+}

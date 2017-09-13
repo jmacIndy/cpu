@@ -7,6 +7,7 @@
 #include "memory.h"
 #include "heap.h"
 #include "stack.h"
+#include "bios.h"
 
 typedef unsigned char byte;
 

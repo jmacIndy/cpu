@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "stack.h"
+
 typedef unsigned char byte;
 
 byte register0;
@@ -77,5 +79,8 @@ void printProgramCounter();
 void printHeapPointer();
 void printFlags();
 void dumpCPU();
+
+void pushCPUState();
+void popCPUState();
 
 #endif

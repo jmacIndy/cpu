@@ -141,9 +141,27 @@ void opReturn()
 }
 
 /* FUNCTION: opInterrupt (INT op code 0x10) */
-void opInterrupt()
-{
-   ; // TODO
+void opInterrupt() {
+
+   // interrupt number is operand
+   //    type goes into r0
+   // interrupt 0x01 - keyboard services
+   //    type 01 - read from keyboard
+   //            - read value goes into r1
+   // interrupt 0x02 - display services
+   //    type 01 - write number to display
+   //            - r1 contains number to write
+   //    type 02 - write character to display
+   //            - r1 contains character to write
+   //    type 03 - write string to display
+   //            - r1 contains address of start of string
+
+    byte interruptCode = readMemory(++programCounter);
+
+    pushCPUState();
+    handleInterrupt(interruptCode, register0, register1);
+    popCPUState();
+    programCounter++;
 }
 
 /* FUNCTION: opCompare (CMP op code 0x11) */

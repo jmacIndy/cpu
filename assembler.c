@@ -292,6 +292,8 @@ void pass2ProcessLine(char *token, FILE *outFile)
       else if ((strcmp(token, "INT")) == 0) // DONE
       {
          fprintf(outFile, "10");
+         token = strtok(NULL, " \t\n");
+         fprintf(outFile, "%02X", (int) strtol(token, NULL, 0));
       }
       else if ((strcmp(token, "CMP")) == 0) // DONE
       {
