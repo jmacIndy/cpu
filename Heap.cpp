@@ -1,21 +1,15 @@
 #include "Heap.h"
 
-// FUNCTION: dump
-// PURPOSE: Print out contents of the heap (where data lives)
-// RETURNS: void
-// ARGUMENTS: none
-// EFFECTS: none
-
 void Heap::dump() const
 {
    int addressCounter = 0x00;
 
-   std::cout << "Heap Contents: " 
+   std::cout << "Heap Contents: "
              << std::endl
-             << "---------------" 
-             << std::endl;
+             << "---------------";
 
    int j = 0x00;
+
    for (auto i = heap.begin(); i != heap.end(); i++, j++)
    {
       if ((j % 0x0F) == 0x00)
@@ -23,6 +17,7 @@ void Heap::dump() const
          std::cout << std::endl
                    << "Address("
                    << std::setw(2)
+                   << std::setfill('0')
                    << std::hex
                    << std::uppercase
                    << addressCounter

@@ -1,16 +1,20 @@
-#include "Memory.h"
+#include "Stack.h"
 
-void Memory::dump() const
+void Stack::dump() const
 {
    int addressCounter = 0x00;
 
-   std::cout << "Memory Contents: "
+   std::cout << "Stack Contents: "
              << std::endl
-             << "-----------------";
+             << "---------------"
+             << std::endl
+             << "   Stack Pointer: "
+             << std::hex
+             << static_cast<int>(stackPointer);
 
    int j = 0x00;
 
-   for (auto i = memory.begin(); i != memory.end(); i++, j++)
+   for (auto i = stack.begin(); i != stack.end(); i++, j++)
    {
       if ((j % 0x0F) == 0x00)
       {

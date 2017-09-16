@@ -16,17 +16,16 @@ class Memory
       std::array<byte, MEMORY_SIZE> memory;
 
    public:
+
       Memory() { initialize(); }
 
       void initialize() { memory.fill(0x00); }
-     
-      static byte getSize() { return MEMORY_SIZE; } 
 
       void write(byte address, byte value) { memory[address] = value; }
+
       byte read(byte address) const { return memory[address]; }
 
       void dump() const;
-
 };
 
 #endif
