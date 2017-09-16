@@ -7,6 +7,7 @@
 * Add capability to create and print strings
 * allow LOADs and SETs to specify register, instead of 4 ops
 * merge LOADs and SETs to reduce ops
+* allow INCs and DECs to specify register, instead of 4 ops
 * Write unit tests
 * Expand from 8-bits to 16-bits
 * Beyond: write OS

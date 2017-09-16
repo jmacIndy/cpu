@@ -1,14 +1,14 @@
 #include "Ops.h"
 
 /* FUNCTION: opHalt (HALT op code 0x00) */
-void Ops::opHalt(Cpu &cpu)
+void opHalt(Cpu &cpu)
 {
    cpu.setHalt();
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opSet0 (SET0 op code 0x01) */
-void Ops::opSet0(Cpu &cpu, Memory &memory)
+void opSet0(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    cpu.setRegister0( memory.read(cpu.getProgramCounter()));
@@ -16,7 +16,7 @@ void Ops::opSet0(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opSet1 (SET1 op code 0x02) */
-void Ops::opSet1(Cpu &cpu, Memory &memory)
+void opSet1(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    cpu.setRegister1(memory.read(cpu.getProgramCounter()));
@@ -24,14 +24,14 @@ void Ops::opSet1(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opAdd (ADD op code 0x03) */
-void Ops::opAdd(Cpu &cpu)
+void opAdd(Cpu &cpu)
 {
    cpu.setRegister0(cpu.getRegister0() + cpu.getRegister1());
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opStore (STOR op code 0x04) */
-void Ops::opStore(Cpu &cpu, Memory &memory, Heap &heap)
+void opStore(Cpu &cpu, Memory &memory, Heap &heap)
 {
    cpu.incrementProgramCounter();
    cpu.setHeapPointer(memory.read(cpu.getProgramCounter()));
@@ -40,7 +40,7 @@ void Ops::opStore(Cpu &cpu, Memory &memory, Heap &heap)
 }
 
 /* FUNCTION: opPrint (PRT op code 0x05) */
-void Ops::opPrint(Cpu &cpu, Memory &memory, Heap &heap)
+void opPrint(Cpu &cpu, Memory &memory, Heap &heap)
 {
    cpu.incrementProgramCounter();
    cpu.setHeapPointer(memory.read(cpu.getProgramCounter()));
@@ -53,28 +53,28 @@ void Ops::opPrint(Cpu &cpu, Memory &memory, Heap &heap)
 }
 
 /* FUNCTION: opMultiply (MULT op code 0x07) */
-void Ops::opMultiply(Cpu &cpu)
+void opMultiply(Cpu &cpu)
 {
    cpu.setRegister0(cpu.getRegister0() * cpu.getRegister1());
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION; opDivide (DIV op code 0x08) */
-void Ops::opDivide(Cpu &cpu)
+void opDivide(Cpu &cpu)
 {
    cpu.setRegister0(cpu.getRegister0() / cpu.getRegister1());
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opSubtract (SUB op code 0x09) */
-void Ops::opSubtract(Cpu &cpu)
+void opSubtract(Cpu &cpu)
 {
    cpu.setRegister0(cpu.getRegister0() - cpu.getRegister1());
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opJumpEqual (JEQ op code 0x0A) */
-void Ops::opJumpEqual(Cpu &cpu, Memory &memory)
+void opJumpEqual(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    if (cpu.isGreaterThan() || cpu.isLessThan())
@@ -88,7 +88,7 @@ void Ops::opJumpEqual(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opJumpNotEqual (JNE op code 0x0B) */
-void Ops::opJumpNotEqual(Cpu &cpu, Memory &memory)
+void opJumpNotEqual(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    if (cpu.isGreaterThan() || cpu.isLessThan())
@@ -102,7 +102,7 @@ void Ops::opJumpNotEqual(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opJumpLessThan (JLT op code 0x0C) */
-void Ops::opJumpLessThan(Cpu &cpu, Memory &memory)
+void opJumpLessThan(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    if (cpu.isLessThan())
@@ -116,7 +116,7 @@ void Ops::opJumpLessThan(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opJumpGreaterThan (JGT op code 0x0D) */
-void Ops::opJumpGreaterThan(Cpu &cpu, Memory &memory)
+void opJumpGreaterThan(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    if (cpu.isGreaterThan())
@@ -130,7 +130,7 @@ void Ops::opJumpGreaterThan(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opCall (CALL op code 0x0E) */
-void Ops::opCall(Cpu &cpu, Stack &stack, Memory &memory)
+void opCall(Cpu &cpu, Stack &stack, Memory &memory)
 {
    cpu.incrementProgramCounter();
    stack.push(cpu.getProgramCounter() + 1);
@@ -138,13 +138,13 @@ void Ops::opCall(Cpu &cpu, Stack &stack, Memory &memory)
 }
 
 /* FUNCTION: opReturn (RET op code 0x0F) */
-void Ops::opReturn(Cpu &cpu, Stack &stack)
+void opReturn(Cpu &cpu, Stack &stack)
 {
    cpu.setProgramCounter(stack.pop());
 }
 
 /* FUNCTION: opInterrupt (INT op code 0x10) */
-void Ops::opInterrupt(Cpu &cpu, Memory &memory, Bios &bios, Stack &stack) 
+void opInterrupt(Cpu &cpu, Memory &memory, Stack &stack) 
 {
 
    // interrupt number is operand
@@ -164,13 +164,13 @@ void Ops::opInterrupt(Cpu &cpu, Memory &memory, Bios &bios, Stack &stack)
    byte interruptCode = memory.read(cpu.getProgramCounter());
 
    cpu.pushState(stack);
-   bios.handleInterrupt(interruptCode, cpu.getRegister0(), cpu.getRegister1());
+   handleInterrupt(interruptCode, cpu.getRegister0(), cpu.getRegister1());
    cpu.popState(stack);
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opCompare (CMP op code 0x11) */
-void Ops::opCompare(Cpu &cpu)
+void opCompare(Cpu &cpu)
 {
    cpu.resetGreaterThan();
    cpu.resetLessThan();
@@ -186,7 +186,7 @@ void Ops::opCompare(Cpu &cpu)
 }
 
 /* FUNCTION: opJumpNotZero (JNZ op code 0x12) */
-void Ops::opJumpNotZero(Cpu &cpu, Memory &memory)
+void opJumpNotZero(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    if (cpu.isNonZero())
@@ -200,14 +200,14 @@ void Ops::opJumpNotZero(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opJump (JMP op code 0x13) */
-void Ops::opJump(Cpu &cpu, Memory &memory)
+void opJump(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    cpu.setProgramCounter(memory.read(cpu.getProgramCounter()));
 }
 
 /* FUNCTION: opJumpZero (JZ opcode 0x14) */
-void Ops::opJumpZero(Cpu &cpu, Memory &memory)
+void opJumpZero(Cpu &cpu, Memory &memory)
 {
    cpu.incrementProgramCounter();
    if (cpu.isZero())
@@ -221,35 +221,35 @@ void Ops::opJumpZero(Cpu &cpu, Memory &memory)
 }
 
 /* FUNCTION: opIncrement0 (INC0 opcode 0x15) */
-void Ops::opIncrement0(Cpu &cpu)
+void opIncrement0(Cpu &cpu)
 {
    cpu.setRegister0(cpu.getRegister0() + 1);
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opIncrement1 (INC1 opcode 0x16) */
-void Ops::opIncrement1(Cpu &cpu)
+void opIncrement1(Cpu &cpu)
 {
    cpu.setRegister1(cpu.getRegister1() + 1);
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION; opDecrement0 (DEC0 opcode 0x17) */
-void Ops::opDecrement0(Cpu &cpu)
+void opDecrement0(Cpu &cpu)
 {
    cpu.setRegister0(cpu.getRegister0() - 1);
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opDecrement1 (DEC1 opcode 0x18) */
-void Ops::opDecrement1(Cpu &cpu)
+void opDecrement1(Cpu &cpu)
 {
    cpu.setRegister1(cpu.getRegister1() - 1);
    cpu.incrementProgramCounter();
 }
 
 /* FUNCTION: opLoad0 (LD0 opcode 0x19) */
-void Ops::opLoad0(Cpu &cpu, Heap &heap)
+void opLoad0(Cpu &cpu, Heap &heap)
 {
    cpu.incrementProgramCounter();
    cpu.setRegister0(heap.read(cpu.getProgramCounter()));
@@ -257,7 +257,7 @@ void Ops::opLoad0(Cpu &cpu, Heap &heap)
 }
 
 /* FUNCTION: opLoad1 (LD1 opcode 0x1A) */
-void Ops::opLoad1(Cpu &cpu, Heap &heap)
+void opLoad1(Cpu &cpu, Heap &heap)
 {
    cpu.incrementProgramCounter();
    cpu.setRegister1(heap.read(cpu.getProgramCounter()));
@@ -265,7 +265,7 @@ void Ops::opLoad1(Cpu &cpu, Heap &heap)
 }
 
 /* FUNCTION: opTest (TST opcode 0x1B) */
-void Ops::opTest(Cpu &cpu)
+void opTest(Cpu &cpu)
 {
    cpu.resetZero();
    cpu.resetNonZero();
@@ -283,7 +283,7 @@ void Ops::opTest(Cpu &cpu)
 }
 
 /* FUNCTION: run */
-void Ops::run(Cpu &cpu, Memory &memory, Heap &heap, Stack &stack, Bios &bios)
+void run(Cpu &cpu, Memory &memory, Heap &heap, Stack &stack)
 {
    std::cout << "... Running ..."
         << std::endl;
@@ -338,7 +338,7 @@ void Ops::run(Cpu &cpu, Memory &memory, Heap &heap, Stack &stack, Bios &bios)
          opReturn(cpu, stack);
          break;
       case 0x10:
-         opInterrupt(cpu, memory, bios, stack);
+         opInterrupt(cpu, memory, stack);
          break;
       case 0x11:
          opCompare(cpu);

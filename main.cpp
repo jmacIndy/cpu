@@ -1,49 +1,63 @@
 #include <iostream>
+#include <string.h>
 
 #include "Cpu.h"
 #include "Memory.h"
 #include "Heap.h"
 #include "Stack.h"
-#include "Bios.h"
+#include "Ops.h"
 
-/*
 #define MAX_FILENAME_SIZE 50
 #define MAX_INPUT_SIZE 500
 
-int displayMenu()
+char displayMenu()
 {
-   int choice;
+   char choice;
 
-   printf("Menu (my CPU)\n");
-   printf("-------------\n");
-   printf("1. Reset CPU\n");
-   printf("2. Clear Memory\n");
-   printf("3. Dump the CPU\n");
-   printf("4. Dump the Memory\n");
-   printf("5. Dump the Heap\n");
-   printf("6. Dump the Stack\n");
-   printf("7. Run the CPU\n");
-   printf("8. Load program from file\n");
-   printf("X. Exit the CPU\n");
-   printf("   Your choice===>");
+   std::cout << "Menu (my CPU)"
+             << std::endl;
+   std::cout << "-------------"
+             << std::endl;
+   std::cout << "1. Reset CPU"
+             << std::endl;
+   std::cout << "2. Clear Memory"
+             << std::endl;
+   std::cout << "3. Dump the CPU"
+             << std::endl;
+   std::cout << "4. Dump the Memory"
+             << std::endl;
+   std::cout << "5. Dump the Heap"
+             << std::endl;
+   std::cout << "6. Dump the Stack"
+             << std::endl;
+   std::cout << "7. Run the CPU"
+             << std::endl;
+   std::cout << "8. Load program from file"
+             << std::endl;
+   std::cout << "X. eXit the CPU"
+             << std::endl;
+   std::cout << "   Your choice===> ";
 
-   choice = getchar();
-   getchar();  // consume the newline
+   std::cin >> choice;
+
    return choice;
 }
 
-void loadProgram()
+void loadProgram(Memory &memory)
 {
    char inName[MAX_FILENAME_SIZE];
 
-   printf("\nEnter input file name ===> ");
+   std::cout << std::endl
+             << "Enter input file name ===> ";
    fgets(inName, sizeof(inName), stdin);
-   inName[strlen(inName) - 1] = '\0'; // remove training \n
+   inName[strlen(inName) - 1] = '\0'; // remove trailing \n
 
    FILE *inFile = fopen(inName, "r");
    if (inFile == 0)
    {
-      printf("ERROR: Could not open file %s\n", inName);
+      std::cout << "ERROR: Could not open file "
+                << inName
+                << std::endl;
       return;
    }
 
@@ -54,7 +68,8 @@ void loadProgram()
 
    if (getline(&inputLine, &lineSize, inFile) == -1)
    {
-      printf("ERROR: File is empty. Nothing to load.\n");
+      std::cout << "ERROR: File is empty. Nothing to load."
+                << std::endl;
       return;
    }
 
@@ -65,7 +80,7 @@ void loadProgram()
       char inData[5];
       strcpy(inData, "0x");
       strncat(inData, inputLine + i, 2);
-      writeMemory(memoryPointer, (int) strtol(inData, NULL, 0));
+      memory.write(memoryPointer, (int) strtol(inData, NULL, 0));
       memoryPointer++;
    }
 
@@ -74,19 +89,14 @@ void loadProgram()
    fclose(inFile);
 }
 
-*/
-
 int main()
 {
-   int menuChoice;
-
-   int exitFlag = 0;
-
    Cpu cpu;
    Memory memory;
    Stack stack;
    Heap heap;
-   Bios bios;
+
+   bool exitFlag = false;
 
    std::cout << "========================="
              << std::endl
@@ -96,55 +106,52 @@ int main()
              << std::endl
              << std::endl;
 
-/*
    while (!exitFlag)
    {
-      menuChoice = displayMenu();
-
-      switch (menuChoice)
+      switch (displayMenu())
       {
       case '1':
-         initializeCPU();
+         cpu.initialize();
          break;
       case '2':
-         clearMemory();
+         memory.initialize();
          break;
       case '3':
-         dumpCPU();
+         cpu.dump();
          break;
       case '4':
-         dumpMemory();
+         memory.dump();
          break;
       case '5':
-         dumpHeap();
+         heap.dump();
          break;
       case '6':
-         dumpStack();
+         stack.dump();
          break;
       case '7':
-         if (isHalt())
+         if (cpu.isHalt())
          {
-            printf("ERROR: CPU is HALTED! Cannot run!\n");
+            std::cout << "ERROR: CPU is HALTED! Cannot run!"
+                      << std::endl;
          }
          else
          {
-            run();
+            run(cpu, memory, heap, stack);
          }
          break;
       case '8':
-         loadProgram();
+         loadProgram(memory);
          break;
       case 'X':
       case 'x':
-         exitFlag = 1;
+         exitFlag = true;
          break;
       default:
-         printf("ERROR: Bad selection! Try again.\n");
+         std::cout << "ERROR: Bad selection! Try again!"
+                   << std::endl;
          break;
       }
    }
-
-*/
 
    return 0;
 }

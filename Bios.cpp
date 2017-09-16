@@ -1,7 +1,6 @@
 #include "Bios.h"
 
-void Bios::handleInterrupt(byte interruptCode, byte interruptType,
-   byte value) 
+void handleInterrupt(byte interruptCode, byte interruptType, byte value)
 {
 
     if (interruptCode == 0x01) {
@@ -28,11 +27,11 @@ void Bios::handleInterrupt(byte interruptCode, byte interruptType,
     }
 }
 
-void Bios::readKeyboard() 
+void readKeyboard() 
 {
 }
 
-void Bios::writeNumberToDisplay(byte value) 
+void writeNumberToDisplay(byte value) 
 {
 
    std::cout << value
@@ -40,13 +39,13 @@ void Bios::writeNumberToDisplay(byte value)
    // printf("%02X\n", value);
 }
 
-void Bios::writeCharToDisplay(byte value) 
+void writeCharToDisplay(byte value) 
 {
    std::cout << value
              << std::endl;
    // printf("%c\n", value);
 }
 
-void Bios::writeStringToDisplay(byte value) 
+void writeStringToDisplay(byte value) 
 {
 }

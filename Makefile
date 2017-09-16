@@ -3,7 +3,7 @@ all: cpuc
 cpuc: main.o Memory.o Cpu.o Heap.o Stack.o Ops.o Bios.o
 	g++ main.o Cpu.o Memory.o Heap.o Stack.o Ops.o Bios.o -o ~/bin/cpuc
 
-main.o: main.cpp Cpu.h Memory.h Heap.h Stack.h Ops.h Bios.h
+main.o: main.cpp Cpu.h Memory.h Heap.h Stack.h Ops.h
 	g++ -c -std=c++11 main.cpp
 
 Cpu.o: Cpu.cpp Cpu.h Stack.h

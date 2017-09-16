@@ -5,21 +5,14 @@
 
 typedef unsigned char byte;
 
-class Bios
-{
-   public:
+void handleInterrupt(byte interruptCode, byte interruptType, byte value);
 
-      void handleInterrupt(byte interruptCode, byte interruptType,
-         byte value);
+void readKeyboard();
 
-      void readKeyboard();
+void writeNumberToDisplay(byte value);
 
-      void writeNumberToDisplay(byte value);
+void writeCharToDisplay(byte value);
 
-      void writeCharToDisplay(byte value);
-
-      void writeStringToDisplay(byte value);
-
-};
+void writeStringToDisplay(byte value);
 
 #endif
