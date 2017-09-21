@@ -1,9 +1,9 @@
 # TODO
 * Rewrite assembler in C++, using ideas in book
 * Figure out:
-..* handle overflows and underflows
-..* handle signing
-..* print function should use interrupts
+  * handle overflows and underflows
+  * handle signing
+  * print function should use interrupts
 * Add capability to create and print strings
 * allow LOADs and SETs to specify register, instead of 4 ops
 * merge LOADs and SETs to reduce ops
