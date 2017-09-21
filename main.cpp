@@ -1,11 +1,14 @@
 #include <iostream>
-#include <string.h>
+#include <fstream>
+#include <string>
 
 #include "Cpu.h"
 #include "Memory.h"
 #include "Heap.h"
 #include "Stack.h"
 #include "Ops.h"
+
+typedef unsigned char byte;
 
 #define MAX_FILENAME_SIZE 50
 #define MAX_INPUT_SIZE 500
@@ -49,44 +52,22 @@ void loadProgram(Memory &memory)
 
    std::cout << std::endl
              << "Enter input file name ===> ";
-   fgets(inName, sizeof(inName), stdin);
-   inName[strlen(inName) - 1] = '\0'; // remove trailing \n
+   std::cin >> inName;
 
-   FILE *inFile = fopen(inName, "r");
-   if (inFile == 0)
-   {
-      std::cout << "ERROR: Could not open file "
-                << inName
-                << std::endl;
-      return;
-   }
-
-   char *inputLine;
-   size_t lineSize = MAX_INPUT_SIZE;
-
-   inputLine = (char *) malloc(lineSize + 1);
-
-   if (getline(&inputLine, &lineSize, inFile) == -1)
-   {
-      std::cout << "ERROR: File is empty. Nothing to load."
-                << std::endl;
-      return;
-   }
+   std::ifstream inFile(inName);
+   std::string inputLine((std::istreambuf_iterator<char>(inFile)),
+      (std::istreambuf_iterator<char>() ));
 
    int filePointer = 3; // skip over CPU text
    byte memoryPointer = 0x00;
-   for (int i = filePointer; i < strlen(inputLine); i += 2)
+   for (std::string::size_type i = filePointer; i < inputLine.size(); i += 2)
    {
-      char inData[5];
-      strcpy(inData, "0x");
-      strncat(inData, inputLine + i, 2);
-      memory.write(memoryPointer, (int) strtol(inData, NULL, 0));
+      std::string inData = "0x";
+      inData.push_back(inputLine[i]);
+      inData.push_back(inputLine[i+1]);
+      memory.write(memoryPointer, std::stoul(inData, nullptr, 16));
       memoryPointer++;
    }
-
-   free(inputLine);
-
-   fclose(inFile);
 }
 
 int main()
